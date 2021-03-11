@@ -1,37 +1,39 @@
 import React, { useState, useEffect } from "react";
 import { dbService } from "fbase";
+import Yweet from "components/Yweet";
 
-const Home = () => {
+const Home = ({ userObj }) => {
   const [yweet, setYweet] = useState("");
   const [yweets, setYweets] = useState([]);
-  const getYweets = async () => {
-    const dbYweets = await dbService.collection("yweets").get();
-    dbYweets.forEach((doc) => {
-      const yweetObject = {
-        ...doc.data(),
-        id: doc.id,
-      };
-      setYweets((prev) => [yweetObject, ...prev]);
-    });
-  };
+
   useEffect(() => {
-    getYweets();
+    //DB 변화(CRUD)를 실시간 감지하는 리스너 부착
+    dbService.collection("yweets").onSnapshot((snapshot) => {
+      const yweetArray = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setYweets(yweetArray);
+    });
   }, []);
+
   const onSubmit = async (event) => {
     event.preventDefault();
     await dbService.collection("yweets").add({
-      yweet,
+      text: yweet,
       createAt: Date.now(),
+      creatorId: userObj.uid,
     });
     setYweet("");
   };
+
   const onChange = (event) => {
     const {
       target: { value },
     } = event;
     setYweet(value);
   };
-  console.log(yweets);
+
   return (
     <div>
       <form onSubmit={onSubmit}>
@@ -46,9 +48,11 @@ const Home = () => {
       </form>
       <div>
         {yweets.map((yweet) => (
-          <div key={yweet.id}>
-            <h4>{yweet.yweet}</h4>
-          </div>
+          <Yweet
+            key={yweet.id}
+            yweetObj={yweet}
+            isOwner={yweet.creatorId === userObj.uid}
+          />
         ))}
       </div>
     </div>
