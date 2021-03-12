@@ -10,13 +10,16 @@ const Home = ({ userObj }) => {
 
   useEffect(() => {
     //DB 변화(CRUD)를 실시간 감지하는 리스너 부착
-    dbService.collection("yweets").onSnapshot((snapshot) => {
-      const yweetArray = snapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-      setYweets(yweetArray);
-    });
+    dbService
+      .collection("yweets")
+      .orderBy("createAt", "desc")
+      .onSnapshot((snapshot) => {
+        const yweetArray = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setYweets(yweetArray);
+      });
   }, []);
 
   const onSubmit = async (event) => {
