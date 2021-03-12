@@ -10,7 +10,7 @@ const Profile = ({ refreshUser, userObj }) => {
     history.push("/"); //redirect
   };
   const getMyYweets = async () => {
-    const yweets = await dbService
+    await dbService
       .collection("yweets")
       .where("creatorId", "==", userObj.uid)
       .orderBy("createAt", "desc")
