@@ -42,8 +42,7 @@ const Auth = () => {
     } else if (name === "github") {
       provider = new firebaseInstance.auth.GithubAuthProvider();
     }
-    const data = await authService.signInWithPopup(provider);
-    console.log(data);
+    await authService.signInWithPopup(provider);
   };
 
   return (
@@ -69,7 +68,7 @@ const Auth = () => {
         {error}
       </form>
       <span onClick={toggleAccount}>
-        {newAccount ? "Sign In" : "Create Account"}
+        {newAccount ? "Log In" : "Create Account"}
       </span>
       <div>
         <button onClick={onSocialClick} name="google">
