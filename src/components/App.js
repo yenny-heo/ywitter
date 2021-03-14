@@ -10,6 +10,14 @@ function App() {
     //관찰자 연결: 사용자 로그인 상태 변경될 때 마다 호출됨
     authService.onAuthStateChanged((user) => {
       if (user) {
+        if (user.displayName === null) {
+          const initializeName = async (email) => {
+            await userObj.updateProfile({
+              displayName: email,
+            });
+          };
+          initializeName(user.email);
+        }
         //user 정보 중 필요한 정보만 저장: state가 바뀌었을 때, react가 얕은 비교를 수행하기 때문에 리렌더링이 되지 않는 버그를 없애줌
         setUserObj({
           displayName: user.displayName,

@@ -50,6 +50,7 @@ const Yweet = ({ yweetObj, isOwner }) => {
       ) : (
         <>
           <h4>{yweetObj.text}</h4>
+          <h5>- By {yweetObj.displayName}</h5>
           {yweetObj.attachmentUrl && (
             <img
               alt="attachment"

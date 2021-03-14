@@ -22,6 +22,7 @@ const YweetFactory = ({ userObj }) => {
       text: yweet,
       createAt: Date.now(),
       creatorId: userObj.uid,
+      displayName: userObj.displayName,
       attachmentUrl,
     };
     await dbService.collection("yweets").add(yweetObj);

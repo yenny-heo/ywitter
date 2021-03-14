@@ -9,16 +9,16 @@ const Profile = ({ refreshUser, userObj }) => {
     authService.signOut();
     history.push("/"); //redirect
   };
-  const getMyYweets = async () => {
-    await dbService
-      .collection("yweets")
-      .where("creatorId", "==", userObj.uid)
-      .orderBy("createAt", "desc")
-      .get();
-  };
   useEffect(() => {
+    const getMyYweets = async () => {
+      await dbService
+        .collection("yweets")
+        .where("creatorId", "==", userObj.uid)
+        .orderBy("createAt", "desc")
+        .get();
+    };
     getMyYweets();
-  }, []);
+  }, [userObj.uid]);
 
   const onChange = (event) => {
     const {
